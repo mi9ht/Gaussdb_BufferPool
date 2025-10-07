@@ -1,14 +1,38 @@
-# GaussDB_BufferPool
+# 🧠 GaussDB BufferPool — 基于 LRU 的缓冲池实现
 
-**第七届“互联网+”大赛产业命题赛道 · 华为云 GaussDB 缓冲池项目**
+## 📘 项目简介
+本项目为第七届中国国际“互联网+”大学生创新创业大赛产业命题赛道·华为云 GaussDB 命题项目，  
+实现了一个 **基于 LRU 缓存策略的数据库缓冲池系统**，支持多线程并发访问、智能指针内存管理与命中率统计。
 
-本项目旨在实现一个基础但具备可扩展性的 Buffer Pool（页缓存）模块，支持 LRU / LFU / LRU-K 及其变种淘汰策略，以提升热点数据访问效率。  
+---
 
-## 背景与目标
+## 🧩 功能特性
 
-- 赛题要求：  
-  1. 实现基本功能的 Buffer Pool，缓存固定大小（page size = 16KB）的一些热点数据；  
-  2. 使用 LRU、LFU、LRU-K 等淘汰算法（及变种），提升缓存命中率，加速热点访问。  
+| 功能模块 | 描述 |
+|-----------|------|
+| **Page 管理** | 使用 `std::shared_ptr<Page>` 管理页面数据，自动回收 |
+| **LRU 缓存策略** | 实现最近最少使用算法，提高缓存命中率 |
+| **线程安全设计** | 使用 `std::mutex` / `std::shared_mutex` 实现多读单写并发控制 |
+| **脏页刷回机制** | 缓存淘汰或关闭时自动写回磁盘 |
+| **命中率统计** | 记录命中次数与缺页次数，输出整体命中率 |
 
+---
 
+## 🏗️ 项目结构
+
+```bash
+Gaussdb_BufferPool/
+├── include/
+│   └── gaussdb/
+│       ├── buffer_pool.h        # 抽象基类接口
+│       ├── lru_buffer_pool.h    # LRU 缓冲池实现
+│       ├── page.h               # 页面数据结构
+│       └── server.h             # 官方服务端接口
+├── src/
+│   ├── lru_buffer_pool.cpp
+│   ├── page.cpp
+│   └── server.cpp
+├── example.cpp                  # 程序主入口
+├── CMakeLists.txt               # 构建脚本
+└── README.md                    # 项目说明文件
 
